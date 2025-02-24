@@ -1,0 +1,61 @@
+Инструкция
+
+sudo -u postgres psql
+CREATE ROLE maxim WITH LOGIN PASSWORD '1234' CREATEDB;
+ALTER ROLE postgres PASSWORD '1234';
+CREATE DATABASE mydb OWNER maxim;
+DROP DATABASE mydb WITH (FORCE);
+SHOW port;
+
+\q
+
+psql -U maxim -d mydb -f dump.sql
+sudo -u postgres pd_restore -d mydb -Fc /tmp/dump.sql
+sudo -u postgres psql -d db -f /tmp/dump.sql
+pg_dump -U maxim -d test -F p -f testsql.sql
+
+pip install SQLAlchemy
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://postgres:1234@localhost:5432/db')
+conn = engine.raw_connection()
+df = pd.read_sql('select * from name', conn)
+df.to_sql('df', engine, if_exists = 'replace')
+
+
+sudo service mongod start
+mongosh
+show dbs
+use db
+show collections
+db.dropDatabase()
+mongorestore --db base path
+mongodump --db base --out backup
+
+pip install pymongo
+from pymongo import MongoClient
+conn = MongoClient()
+db = conn['db']
+collection = db['test_db']
+collection.insert_many(df.to_dict('records'))
+list(db['name'].find({}))
+df = pd.DataFrame(db['name'].find({})).drop(columns=['_id'], errors='ignore')
+
+
+sudo systemctl start metabase.service
+http://localhost:3000
+
+Открываешь первый wsl пишешь
+sudo su apache
+cd
+ source apache_venv/bin/activate
+airflow db init
+airflow webserver
+
+
+Открываешь второй wsl и пишешь
+
+sudo su apache
+cd
+ source apache_venv/bin/activate
+airflow db init 
+airflow scheduler
