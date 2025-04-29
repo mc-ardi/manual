@@ -1,4 +1,1 @@
-https://clck.ru/3LQdSu
-
-
-https://cloud.mail.ru/public/5y9o/7arGTnwVZ
+https://drive.google.com/drive/folders/10EBpBHjPgHlSYqSBCZu_9F3BHLYYVzrO
